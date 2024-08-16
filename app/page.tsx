@@ -31,18 +31,18 @@ const MealRateCalculator = () => {
   const calculateTotals = (users: User[]) => {
     const totalBazar = users.reduce((sum, user) => sum + user.amount, 0);
     const totalMeals = users.reduce((sum, user) => sum + user.meals, 0);
-    const mealRate = totalMeals > 0 ? Math.round(totalBazar / totalMeals) : 0;
+    const mealRate = totalMeals > 0 ? totalBazar / totalMeals : 0;
 
     const updatedUsers = users.map((user) => {
       const expectedAmount = user.meals * mealRate;
       return {
         ...user,
-        balance: Math.round(user.amount - expectedAmount),
+        balance: user.amount - expectedAmount,
       };
     });
 
     setUsers(updatedUsers);
-    setTotalBazar(Math.round(totalBazar));
+    setTotalBazar(totalBazar);
     setMealRate(mealRate);
   };
 
@@ -87,9 +87,9 @@ const MealRateCalculator = () => {
 
           <p className="pt-3 pb-10">
             {user.balance > 0
-              ? `${user.name} will get back ${user.balance} Taka.`
+              ? `${user.name} will get back ${user.balance.toFixed(2)} Taka.`
               : user.balance < 0
-                ? `${user.name} needs to pay $${Math.abs(user.balance)} Taka.`
+                ? `${user.name} needs to pay ${Math.abs(user.balance).toFixed(2)} Taka.`
                 : `${user.name} is settled up`}
           </p>
         </div>
@@ -104,8 +104,8 @@ const MealRateCalculator = () => {
         Add User
       </Button>
       <div>
-        <p>Total Bazar: ${totalBazar}</p>
-        <p>Meal Rate: ${mealRate} per meal</p>
+        <p>Total Bazar: ${totalBazar.toFixed(2)}</p>
+        <p>Meal Rate: ${mealRate.toFixed(2)} per meal</p>
       </div>
     </div>
   );
